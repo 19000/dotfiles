@@ -5,5 +5,5 @@ DIR=`pwd`
 echo '.vimrc
 .vim
 .emacs.d' | while read F; do 
-  ln -s $DIR/$F $HOME/$F;
+  [ -f $HOME/$F -o -d $HOME/$F ] || ln -s $DIR/$F $HOME/$F;
 done
