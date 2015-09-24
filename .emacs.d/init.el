@@ -45,8 +45,8 @@
   (kbd "M-.") 'find-function-at-point)
 
 ;; theme
-(add-to-list 'load-path "~/.emacs.d/color-theme-6.6.0")
-(require 'color-theme)
+;(add-to-list 'load-path "~/.emacs.d/color-theme-6.6.0")
+;(require 'color-theme)
 
 ;; Not work in Emacs 24, it's for 23 before. See README in Solarized.
 ;(add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
