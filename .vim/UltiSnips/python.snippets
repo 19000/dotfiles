@@ -1,0 +1,98 @@
+snippet "unit(test)?" "unittest" br
+
+import unittest
+
+class Test(unittest.TestCase):
+    def setUp(self):
+        ${0:pass}
+
+    def test_default_case(self):
+        self.assertEqual($2, ${1})
+
+if __name__ == '__main__':
+    unittest.main()
+endsnippet
+
+snippet "bi(narytree)?" "binary tree builder & printer" br
+from binary_tree_builder import BinaryTree
+from binary_tree_printer import BinaryTreePrinter
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def setUp(self):
+        self.s = Solution()
+        self.bt = BinaryTree()
+        self.bp = BinaryTreePrinter()
+        self.bp.printStructureLine = False
+        serials = ['{1,2,2,3,3,3,3,4,4,4,4,4,4,#,#,5,5} ',
+                   '{1111111111111,2,2,3,3333333,3,3,4,44444444444,44,4444,4,4,#,#,5,5} ',
+                   '{1, #, 2, #, 3}', 
+                   ]
+        self.cases = {}
+        for serial in serials:
+            root = self.bt.deserialize(serial)
+            # self.bp.printTree(root)
+            treeGraph = self.bp.drawTreeGraphByString(root)
+            self.cases[root] = treeGraph.count('\n')
+        pass
+
+    def test_default_case(self):
+        self.assertEqual(True, True)
+        self.assertTrue(True)
+        for c in self.cases:
+            graph = self.bp.drawTreeGraphByString(c)
+            print graph
+            # print graph.encode('hex')
+            # print len(graph)
+            # print self.bp._lineWidth
+	    print self.s$1
+            # self.assertEqual(self.cases[c], self.s{$1})}
+
+if __name__ == '__main__':
+    unittest.main()
+endsnippet
+
+snippet main "auto if __name__ == __main__" b
+if __name__ == '__main__':
+    main()
+endsnippet
+
+snippet def "function without doc"
+def ${1:func}($2):
+    ${0:pass}
+endsnippet
+
+snippet selenium "Selenium Sample" b
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import selenium
+
+driver = webdriver.Chrome()
+#Firefox() #Safari() #Android #PhantomJS()
+
+driver.set_page_load_timeout(2)
+driver.get('http://nga.178.com/read.php?tid=8021263&_ff=-447601&page=1')
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.ID, first_username_ele_id))
+)
+e = driver.find_element_by_xpath('//*[@id="m_pbtntop"]/div/div[2]/table/tbody/tr/td[1]/a')
+driver.close()
+endsnippet
+
+snippet "chinese(regex)?" "Chinese in regex" br
+B = re.compile(u'(?<=[a-zA-Z\d\u4e00-\u9fa5])\B(?=[a-zA-Z\d\u4e00-\u9fa5])')
+endsnippet
+
+snippet cl "class without docstrings" b
+class ${1:MyClass}(${2:object}):
+	def __init__(self$4):`!p
+snip.rv = ""
+snip >> 2
+args = get_args(t[4])
+write_init_body(args, t[2], snip)
+`$0
+endsnippet

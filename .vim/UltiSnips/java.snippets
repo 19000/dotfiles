@@ -1,0 +1,19 @@
+snippet main "main method" b
+public static void main(String[] args) {
+    $1
+}
+endsnippet
+
+snippet class "class" b
+public class $1 ${2:extends $3 }{
+
+    $0
+
+}
+endsnippet
+
+snippet "meth(od)?" "Description" br
+${1:public }${2:static }${3:void }$4($5) {
+    $0
+}
+endsnippet

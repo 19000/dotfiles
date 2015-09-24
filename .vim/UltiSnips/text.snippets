@@ -1,0 +1,7 @@
+snippet yy "user activity statistic" b
+exec '%v/\v\c\(\d*\)\zs .*/d' | %s/// | %!sort | uniq -c | sort -rn
+endsnippet
+
+snippet douyu "douyu user activity statistics" b
+exec '%v/\v\c\zs\:.*/d' | %s/// | %!sort | uniq -c | sort -rn
+endsnippet

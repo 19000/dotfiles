@@ -1,0 +1,33 @@
+snippet size "dir size" b
+du -sh
+endsnippet
+
+snippet test "test formats" b
+[ 0 -eq 0 ]
+[  -d DIR ]
+[  -f FILE ]
+[  -z STRING ]
+[  -n STRING ]
+[  STRING1 = STRING2 ]
+[  STRING1 != STRING2 ]
+
+[  ARG1 -eq ARG2 ]
+[  ARG1 -ne ARG2 ]
+[  ARG1 -lt ARG2 ]
+[  ARG1 -le ARG2 ]
+[  ARG1 -gt ARG2 ]
+[  ARG1 -ge ARG2 ]
+
+[  ! EXPR ]
+[  EXPR1 -a EXPR2 ]
+[  EXPR1 -o EXPR2 ]
+endsnippet
+
+snippet virtualenv "python virtual env" b
+virtualenv env
+source env/bin/activate
+
+pip list
+pip freeze > requirements.txt
+pip install -r requirements.txt
+endsnippet

@@ -1,0 +1,87 @@
+snippet bye "My mail signature"
+Good bye, Sir. Hope to talk to you soon.
+- Arthur, King of Britain
+endsnippet
+
+snippet t
+<tag>${VISUAL:inside text/should/is/g}</tag>
+endsnippet
+
+snippet tt
+<tag>${VISUAL:inside text/should/`date`/g}</tag>
+endsnippet
+
+snippet wow
+${1:Text}`!p snip.rv = (75-2*len(t[1]))*' '+t[1].upper()`
+endsnippet
+
+snippet progressbar "ascii progress bar" b
+${1:0}`!p snip.rv = '|' + int(t[1])/10*'#' + (10-int(t[1])/10)*'-' + '| ' + t[1] + '%'`
+endsnippet
+
+snippet progressbar2 "ascii progress bar" b
+${VISUAL:0/.//g}`!p 
+text = snip.v.text
+snip.rv = '|' + int(text)/10*'#' + (10-int(text)/10)*'-' + '| ' + text + '%'`
+endsnippet
+
+snippet "be(gin)?( (\S+))?" "begin{} / end{}" br
+\begin{${1:`!p
+snip.rv = match.group(3) if match.group(2) is not None else "something"`}}
+    ${2:${VISUAL}}
+\end{$1}$0
+endsnippet
+
+global !p
+def upper_right(inp):
+    return (75 - 2 * len(inp))*' ' + inp.upper()
+endglobal
+
+snippet wow2
+${1:Text}`!p snip.rv = upper_right(t[1])`
+endsnippet
+
+snippet letter
+Dear $1,
+$0
+Yours sincerely,
+$2
+endsnippet
+
+snippet letter2
+Dear $1,
+$3
+Yours sincerely,
+$2
+endsnippet
+
+snippet case
+case ${1:word} in
+    ${2:pattern} ) $0;;
+esac
+endsnippet
+
+snippet a
+<a href="${1:http://www.${2:example.com}}"</a>
+    $0
+</a>
+endsnippet
+
+snippet random
+`#!/usr/bin/perl
+use LWP::Simple qw(get);
+my $page = get "http://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new";
+print $page`
+endsnippet
+
+snippet v2ex "v2ex curl" b
+`curl v2ex.com | head`
+endsnippet
+
+snippet github "同性交友" b
+┋◆冃.狌.交.伖，释.鲂.压.劦、棑.解.漃.瘼◆ █网.址：g I Th u B。c o M
+endsnippet
+
+snippet tt_sh "test" b
+`ls`
+endsnippet
