@@ -37,3 +37,6 @@
 [submodule ".vim/bundle/vim-snippets"]
 	path = .vim/bundle/vim-snippets
 	url = https://github.com/honza/vim-snippets.git
+[submodule ".emacs.d/emacs-color-theme-solarized"]
+	path = .emacs.d/emacs-color-theme-solarized
+	url = https://github.com/sellout/emacs-color-theme-solarized.git
