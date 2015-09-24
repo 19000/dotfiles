@@ -5,9 +5,9 @@
         co = checkout
         ci = commit
         aa = add -A
+        su = submodule update --init --recursive
 [credential]
 [core]
-	excludesfile = /Users/durrrr/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
