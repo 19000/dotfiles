@@ -468,11 +468,36 @@ augroup c_quick_comment
   autocmd FileType c,javascript,java vnoremap <buffer> - :call ToggleCComment()<CR>
 augroup END
 " }}}
+
+" Auto Toggle Comments In Shellscript ---------------------- {{{
+function! ToggleShellCommentLines(linenum)
+  let currentline = getline(a:linenum)
+
+  " line starts with '#'
+  if match(currentline, '\v^[ \t]*\#') !=# -1
+    let currentline = substitute(currentline, '\v^([ \t]*)\#*[ \t]*', '\1', '')
+    call setline(a:linenum, currentline)
+  else
+    let currentline = substitute(currentline, '\v^[ \t]*', '\0# ', '')
+    call setline(a:linenum, currentline)
+  endif
+endfunction
+
+function! ToggleShellComment()
+  call ToggleShellCommentLines('.')
+endfunction
+
+augroup shell_quick_comment
+  autocmd!
+  autocmd FileType sh nnoremap <buffer> - :call ToggleShellComment()<CR>
+  autocmd FileType sh vnoremap <buffer> - :call ToggleShellComment()<CR>
+augroup END
+" }}}
  
 " }}}
 
 " Run Current File <Space> {{{
-function! PotionShowBytecode()
+function! PotionShowBytecode() " Example from Learn Vimscript The Hard Way {{{
     " Get the bytecode.
     let bytecode = system(g:potion_command . " -c -V " . bufname("%") . " 2>&1")
 
@@ -484,7 +509,8 @@ function! PotionShowBytecode()
 
     " Insert the bytecode.
     call append(0, split(bytecode, '\v\n'))
-endfunction
+endfunction " }}}
+
 function! RunPythonSplitWindow()
   write
   let l:out = system("python " . bufname("%") . " 2>&1")
@@ -492,7 +518,8 @@ function! RunPythonSplitWindow()
   let l:consoleName = '__Python_Out__'
   let l:nr = bufwinnr(l:consoleName)
   if l:nr ==# -1
-    execute 'vsplit ' . l:consoleName
+    " execute 'vsplit ' . l:consoleName
+    execute 'belowright split ' . l:consoleName
   else
     execute l:nr . 'wincmd w'
   endif
