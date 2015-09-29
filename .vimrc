@@ -182,10 +182,10 @@ nnoremap \\/ :%s//\0/g<cr>
 "cnoremap %% <C-R>=expand('%:p:h').'/'<cr>
 "cnoremap \|\| <space>\| view -
 
-nnoremap \cd :cd %:p:h<CR>:pwd<CR>
-nnoremap \sh :cd %:p:h<CR>:sh<CR>
-nnoremap \tm :cd %:p:h<CR>:!tmux attach \|\| tmux<CR>
-nnoremap \\tm :cd %:p:h<CR>:!tmux<CR>
+nnoremap \cd :lcd %:p:h<CR>:pwd<CR>
+nnoremap \sh :lcd %:p:h<CR>:sh<CR>
+nnoremap \tm :lcd %:p:h<CR>:!tmux attach \|\| tmux<CR>
+nnoremap \\tm :lcd %:p:h<CR>:!tmux<CR>
 
 nnoremap \ct :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
@@ -541,15 +541,15 @@ augroup END
 
 augroup c_quick_run
   autocmd!
-  autocmd FileType c nnoremap <buffer> <space> :cd %:p:h<CR>:w\|:!gcc %&&./a.out<cr>
+  autocmd FileType c nnoremap <buffer> <space> :lcd %:p:h<CR>:w\|:!gcc %&&./a.out<cr>
 augroup END
 
 augroup java_quick_run
   autocmd!
-  " autocmd FileType java nnoremap <buffer> <space> :cd %:p:h<CR>:w \| :!javac -classpath ./:./stdlib.jar:./algs4.jar % && java -ea -classpath ./:./stdlib.jar:./algs4.jar %< 
+  " autocmd FileType java nnoremap <buffer> <space> :lcd %:p:h<CR>:w \| :!javac -classpath ./:./stdlib.jar:./algs4.jar % && java -ea -classpath ./:./stdlib.jar:./algs4.jar %< 
 
   " This works for packaged class
-  autocmd FileType java nnoremap <buffer> <space> :w \| :!javac % && java %:r<CR>
+  autocmd FileType java nnoremap <buffer> <space> :lcd %:h<CR>:w \| :!javac % && java %:r<CR>
 augroup END
 
 augroup scheme_quick_run
@@ -564,26 +564,26 @@ augroup END
 
 augroup javascript_quick_run
   autocmd!
-  autocmd FileType javascript nnoremap <buffer> <space> :w\|:!node %<cr>
+  autocmd FileType javascript nnoremap <buffer> <space> :lcd %:h\|:w\|:!node %<cr>
+  autocmd FileType javascript nnoremap <buffer> \<space> :lcd %:h\|:w\|:!cd ../; mocha<cr>
+ 
 augroup END
 " }}}
 
 " Vim script manual shortcut {{{
-" Disabled {{{
-"augroup vim_manual_shortcut
-"  autocmd!
-"  autocmd FileType vim nnoremap <buffer> K viw"ay:h <C-r>a<CR>
-"  autocmd FileType vim vnoremap <buffer> K "ay:h <C-r>a<CR>
-"
-"  autocmd FileType txt nnoremap <buffer> K viw"ay:h <C-r>a<CR>
-"  autocmd FileType txt vnoremap <buffer> K "ay:h <C-r>a<CR>
-"augroup END
-" }}}
+augroup vim_manual_shortcut
+autocmd!
+autocmd FileType vim nnoremap <buffer> K viw"ay:h <C-r>a<CR>
+autocmd FileType vim vnoremap <buffer> K "ay:h <C-r>a<CR>
 
-nnoremap K viw"ay:h <C-r>a<CR>
-vnoremap K "ay:h <C-r>a<CR>
-nnoremap <Leader>K viw"ay:h <C-r>a
-vnoremap <Leader>K "ay:h <C-r>a
+autocmd FileType txt nnoremap <buffer> K viw"ay:h <C-r>a<CR>
+autocmd FileType txt vnoremap <buffer> K "ay:h <C-r>a<CR>
+augroup END
+
+" nnoremap K viw"ay:h <C-r>a<CR>
+" vnoremap K "ay:h <C-r>a<CR>
+" nnoremap <Leader>K viw"ay:h <C-r>a
+" vnoremap <Leader>K "ay:h <C-r>a
 " }}}
  
 " The following maps the F8 key to toggle between hex and binary (while also setting the 
