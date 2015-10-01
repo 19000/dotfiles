@@ -52,6 +52,7 @@ filetype plugin indent on    " required
 
 " Pathogen {{{
 execute pathogen#infect()
+call pathogen#helptags()
 syntax on
 " }}}
 
@@ -158,8 +159,10 @@ nnoremap <c-\><c-t> :tabe<cr>
 nnoremap <c-\><c-\><c-t> :tabe 
 
 nnoremap gr gT
-nnoremap <C-l> gt
-nnoremap <C-h> gT
+" nnoremap <C-l> gt
+" nnoremap <C-h> gT
+nnoremap <C-n> gt
+nnoremap <C-p> gT
 
 " }}}
 
@@ -318,7 +321,8 @@ let g:jedi#popup_on_dot = 0
 
 " UltiSnips {{{
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<c-j>"
 "let g:UltiSnipsJumpForwardTrigger="<c-b>"
 "let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
@@ -332,6 +336,10 @@ let g:UltiSnipsEditSplit="vertical"
 " MarkdownPreview.vim{{{
 let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
 " let g:mkdp_path_to_chrome = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"
+" }}}
+
+" Ctrlp {{{
+let g:ctrlp_map = '<c-\><c-p>'
 " }}}
 
 " }}}
