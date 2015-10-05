@@ -49,13 +49,11 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " ------Vundle Stuff End
 " }}}
-
 " Pathogen {{{
 execute pathogen#infect()
 call pathogen#helptags()
 syntax on
 " }}}
-
 " Basic Settings ----------------- {{{
 set nu
 set rnu
@@ -106,7 +104,6 @@ set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l/%L,%c%V%)\ %P
 " }}}
 "
 " }}}
-
 " Foldmethod Settings --------------- {{{
 set foldmethod=syntax
 "nmap zr zR
@@ -143,14 +140,15 @@ augroup END
 
 set nofoldenable
 " }}}
-
 " Basic Mappings ----------------- {{{
+let mapleader = " " 
 nnoremap <Leader>n :set nu! rnu!<CR>
-
 " Window {{{
-nnoremap \q :close!<cr>
-nnoremap <C-Tab> :bn<cr>
-nnoremap <S-Tab> :bp<cr>
+nnoremap <leader>q :close<cr>
+" nnoremap C :close<cr>
+
+" nnoremap <C-Tab> :bn<cr>
+" nnoremap <S-Tab> :bp<cr>
 "nmap <C-j> <C-W>j
 "nmap <C-k> <C-W>k
 "nmap <C-h> <C-W>h
@@ -165,71 +163,56 @@ nnoremap <C-n> gt
 nnoremap <C-p> gT
 
 " }}}
-
 " Command {{{
-nnoremap !! :!
+nmap \ <Plug>RunCurrentFile
+nmap <leader>\ <Plug>RunTestCurrentFile
 
+nnoremap !! :!
 " Search {{{
 nnoremap / /\v\c
 vnoremap / /\v\c
 "cnoremap %s/ %smagic/
 "cnoremap \>s/ \>smagic/
 
-nnoremap \/ :vimgrep /\v\c/gj ./**/*<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-f>i
+nnoremap <leader>/ :vimgrep /\v\c/gj ./**/*<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-f>i
 "count search pattern
-nnoremap \\/ :%s//\0/g<cr>
-" }}}
+nnoremap <leader><leader>/ :%s//\0/g<cr>
 
+nnoremap * *<C-o>
+" vnoremap * y/\V<C-R>"<CR>N  " This fail when contain '/'
+vnoremap * y/\V<C-R>=substitute(g:get_visual_selection(), '\/', '\\\/', 'g')<CR><CR><C-o>
+" }}}
 "audo fill pwd
 "cnoremap %% <C-R>=expand('%:h').'/'<cr>
 "cnoremap %% <C-R>=expand('%:p:h').'/'<cr>
-"cnoremap \|\| <space>\| view -
 
-nnoremap \cd :lcd %:p:h<CR>:pwd<CR>
-nnoremap \sh :lcd %:p:h<CR>:sh<CR>
-nnoremap \tm :lcd %:p:h<CR>:!tmux attach \|\| tmux<CR>
-nnoremap \\tm :lcd %:p:h<CR>:!tmux<CR>
+nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
+nnoremap <leader>sh :lcd %:p:h<CR>:sh<CR>
+nnoremap <leader>tm :lcd %:p:h<CR>:!tmux attach \|\| tmux<CR>
+nnoremap <leader><leader>tm :lcd %:p:h<CR>:!tmux<CR>
 
-nnoremap \ct :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+nnoremap <leader>ct :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 "vmap \g :%!git show  
 "nmap \g :tabe<cr>:%!git show 
 cnoremap W!! w !sudo tee >/dev/null %
 
-nnoremap \\g :Gstatus<CR>
+nnoremap <leader><leader>g :Gstatus<CR>
 
-" }}}
-
-"use <c-o> instead of these imap
-"imap <c-e> <esc>A
-"imap <c-a> <esc>I
-"imap <c-j> <Left>
-"imap <c-k> <Right>
-nnoremap \w :cw<cr>
-"nnoremap \\\ :tabe ~/.vimrc<cr>
-nnoremap \\\ :tabe $MYVIMRC<cr>
+nnoremap <leader>w :cw<cr>
+"nnoremap <leader><leader><leader> :tabe ~/.vimrc<cr>
+nnoremap <leader><leader><leader> :tabe $MYVIMRC<cr>
 " this mapping make vi behave awkward when starting
 "nnoremap <esc> :noh<return><esc>
-nnoremap \<esc> :noh<cr>
-
-nnoremap <F8> :NERDTreeToggle<CR>
-
-set pastetoggle=<F7>
-
-" System Clipboard {{{
-nnoremap \y $v0"+y
-nnoremap \\y ggVG"+y
-nnoremap \p "+P
-vnoremap \p "+p
-vnoremap \y "+y
+nnoremap <leader><esc> :noh<cr>
 " }}}
-
-nnoremap * *N
-" vnoremap * y/\V<C-R>"<CR>N  " This fail when contain '/'
-vnoremap * y/\V<C-R>=substitute(g:get_visual_selection(), '\/', '\\\/', 'g')<CR><CR>N
-
-"nnoremap : q:i
-
+" System Clipboard {{{
+nnoremap <leader>y $v0"+y
+nnoremap <leader><leader>y ggVG"+y
+nnoremap <leader>p "+P
+vnoremap <leader>p "+p
+vnoremap <leader>y "+y
+" }}}
 " Test Settings ------------------------ {{{
 "nmap - viw
 "nmap = vaw
@@ -240,36 +223,99 @@ vnoremap * y/\V<C-R>=substitute(g:get_visual_selection(), '\/', '\\\/', 'g')<CR>
 "nmap +
 "inoremap <S-u> <ESC>vawUea
 "inoremap <C-u> <ESC>vUa
-inoremap <C-u> <ESC>vawUea
-nnoremap <C-u> bvUe
 
+" Wrap selection with ""
 "vnoremap ' <esc>`>a'<esc>`<i'<esc>
 "vnoremap " <esc>`>a"<esc>`<i"<esc>
 " }}}
-
-
-inoremap jk <ESC>
+" New Habbits {{{
+" -------- nop keys ---------
 inoremap <esc> <nop>
-nnoremap s F
-vnoremap s F
-
-" Nop Keys ---------------- {{{
+nnoremap <C-f> <nop>
+nnoremap <C-b> <nop>
+" nnoremap : <nop>
 "nnoremap h <nop>
 "nnoremap l <nop>
 "nnoremap w <nop>
 "nnoremap e <nop>
 "nnoremap b <nop>
 "inoremap <C-h> <nop>
+
+" cnoremap <C-f> <ESC>
+noremap f <C-f>
+noremap b <C-b>
+
+" inoremap jk <ESC><>
+inoremap <C-f> <ESC>
+inoremap <C-g> <ESC>
+inoremap <C-h> <ESC>:noh<cr>
+vnoremap <C-f> <ESC>
+vnoremap <C-g> <ESC>
+vnoremap <C-h> <ESC>:noh<cr>
+" cnoremap <C-g> <ESC>
+" cnoremap <C-c> 123456
+
+nnoremap s f
+vnoremap s f
+nnoremap S F
+vnoremap S F
+
+" nnoremap <cr> V
+nnoremap ss g_
+vnoremap ss g_
+
+" nnoremap vv ^vg_
+nnoremap v V
+nnoremap V ^vg_
+
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+inoremap <C-a> <esc>I
+inoremap <C-e> <esc>A
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
+
+nnoremap <silent> ? :execute 'vimgrep /' . @/ . '/g %'<CR>:copen<CR>
+
+nnoremap <leader>z zMzvzz
+
+inoremap <C-u> <ESC>vawUea
+nnoremap <C-u> bvUe
+
+
+" iMap (I {I [i 'i "I <I
+inoremap (i ()<esc>i
+inoremap [i []<esc>i
+inoremap {i {}<esc>i
+inoremap 'i ''<esc>i
+inoremap "i ""<esc>i
+inoremap <i <><esc>i
+
+inoremap (I ()<esc>i
+inoremap [I []<esc>i
+inoremap {I {}<esc>i
+inoremap 'I ''<esc>i
+inoremap "I ""<esc>i
+inoremap <I <><esc>i
+
+" inoremap () <Nop>
+" inoremap [] <Nop>
+" inoremap {} <Nop>
+" inoremap '' <Nop>
+" inoremap "" <Nop>
+" inoremap <> <Nop>
+
+inoremap / <esc>
+inoremap <esc> /
 " }}}
-
-"" Simulate SublimeText2 Output
-"
-"" unnamed buffer (need :q! to close)
-" nnoremap \<space> <c-w>n<c-w>L:%!python #<cr>
-"
-"" use tmp file to avoid :q! when close
-" nnoremap \<space> :w \| :silent execute "!python % > /tmp/output.vim.out" \| :belowright 20split + /tmp/output.vim.out<cr>
-
+nnoremap <F8> :NERDTreeToggle<CR>
+set pastetoggle=<F7>
 " }}}
 
 " Plugin Settings {{{
@@ -343,7 +389,6 @@ let g:ctrlp_map = '<c-\><c-p>'
 " }}}
 
 " }}}
-
 " Jump to last cursor position unless it's invalid or in an event handler {{{
 augroup vimrcEx
   autocmd BufReadPost *
@@ -352,7 +397,6 @@ augroup vimrcEx
     \ endif
 augroup END
 " }}}
-
 " auto save & restore session {{{
 fu! SaveSess()
   execute 'mksession! ' . $HOME . '/.session.vim'
@@ -376,7 +420,6 @@ autocmd VimLeave * call SaveSess()
 " this makes a mess when open multiple vi
 "autocmd VimEnter * call RestoreSess()
 " }}}
-
 " Test Area {{{
 function! g:get_visual_selection()
   " Why is this not a built-in Vim script function?!
@@ -400,7 +443,6 @@ nnoremap <silent> <C-F8> :WMToggle<cr>
 "%!sort --field-separator='(' -n --key=2 -r
 
 " }}}
-
 " Auto Toggle Comments {{{
 " Auto Toggle Comments In Python ---------------------- {{{
 function! TogglePythonCommentLines(linenum)
@@ -503,8 +545,7 @@ augroup END
 " }}}
  
 " }}}
-
-" Run Current File <Space> {{{
+" Run Current File {{{
 function! PotionShowBytecode() " Example from Learn Vimscript The Hard Way {{{
     " Get the bytecode.
     let bytecode = system(g:potion_command . " -c -V " . bufname("%") . " 2>&1")
@@ -535,49 +576,48 @@ function! RunPythonSplitWindow()
   normal! ggdG
   setlocal filetype=pythonoutput
   setlocal buftype=nofile
-  nnoremap <buffer> q :q<CR>
-  nnoremap <buffer> <space> :q<CR>
+  nnoremap <buffer> <silent> q :q<CR>
+  nnoremap <buffer> <silent> <Plug>RunCurrentFile :q<CR>
 
   call append(0, split(l:out, '\v\n'))
 endfunction
 
 augroup python_quick_run
   autocmd!
-  " autocmd FileType python nnoremap <buffer> <space> :w\|:!python %<cr>
-  autocmd FileType python nnoremap <buffer> <space> :call RunPythonSplitWindow()<CR>
+  " autocmd FileType python nnoremap <buffer> <Plug>RunCurrentFile :w\|:!python %<cr>
+  autocmd FileType python nnoremap <buffer> <Plug>RunCurrentFile :call RunPythonSplitWindow()<CR>
 augroup END
 
 augroup c_quick_run
   autocmd!
-  autocmd FileType c nnoremap <buffer> <space> :lcd %:p:h<CR>:w\|:!gcc %&&./a.out<cr>
+  autocmd FileType c nnoremap <buffer> <Plug>RunCurrentFile :lcd %:p:h<CR>:w\|:!gcc %&&./a.out<cr>
 augroup END
 
 augroup java_quick_run
   autocmd!
-  " autocmd FileType java nnoremap <buffer> <space> :lcd %:p:h<CR>:w \| :!javac -classpath ./:./stdlib.jar:./algs4.jar % && java -ea -classpath ./:./stdlib.jar:./algs4.jar %< 
+  " autocmd FileType java nnoremap <buffer> <Plug>RunCurrentFile :lcd %:p:h<CR>:w \| :!javac -classpath ./:./stdlib.jar:./algs4.jar % && java -ea -classpath ./:./stdlib.jar:./algs4.jar %< 
 
   " This works for packaged class
-  autocmd FileType java nnoremap <buffer> <space> :lcd %:h<CR>:w \| :!javac % && java %:r<CR>
+  autocmd FileType java nnoremap <buffer> <Plug>RunCurrentFile :lcd %:h<CR>:w \| :!javac % && java %:r<CR>
 augroup END
 
 augroup scheme_quick_run
   autocmd!
-  autocmd FileType scheme nnoremap <buffer> <space> :w <bar> :!scheme < %<cr>
+  autocmd FileType scheme nnoremap <buffer> <Plug>RunCurrentFile :w <bar> :!scheme < %<cr>
 augroup END
 
 augroup sql_quick_run
   autocmd!
-  autocmd FileType sql nnoremap <buffer> <space> :w\|:!mysql -tTv -hlocalhost -uroot < %<cr>
+  autocmd FileType sql nnoremap <buffer> <Plug>RunCurrentFile :w\|:!mysql -tTv -hlocalhost -uroot < %<cr>
 augroup END
 
 augroup javascript_quick_run
   autocmd!
-  autocmd FileType javascript nnoremap <buffer> <space> :lcd %:h\|:w\|:!node %<cr>
-  autocmd FileType javascript nnoremap <buffer> \<space> :lcd %:h\|:w\|:!cd ../; mocha<cr>
+  autocmd FileType javascript nnoremap <buffer> <Plug>RunCurrentFile :lcd %:h\|:w\|:!node %<cr>
+  autocmd FileType javascript nnoremap <buffer> <Plug>RunTestCurrentFile :lcd %:h\|:w\|:!cd ../; mocha<cr>
  
 augroup END
 " }}}
-
 " Vim script manual shortcut {{{
 augroup vim_manual_shortcut
 autocmd!
@@ -593,7 +633,12 @@ augroup END
 " nnoremap <Leader>K viw"ay:h <C-r>a
 " vnoremap <Leader>K "ay:h <C-r>a
 " }}}
- 
+" Quick editing {{{
+nnoremap <leader>ev :tabedit ~/dotfiles/.vimrc<CR>
+nnoremap <leader>es :tabedit ~/dotfiles/.vim/UltiSnips<CR>
+nnoremap <leader>eb :tabedit ~/dotfiles/.vim/bundle<CR>
+" }}}
+
 " The following maps the F8 key to toggle between hex and binary (while also setting the 
 " noeol and binary flags, so if you :write your file, vim doesn't perform unwanted conversions.
 
