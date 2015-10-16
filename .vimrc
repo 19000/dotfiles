@@ -108,7 +108,6 @@ set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l/%L,%c%V%)\ %P
 set foldmethod=syntax
 "nmap zr zR
 "nmap zm zM
-
 "set foldtext=MyFoldText()
 "function MyFoldText() " {{{
   "let line = getline(v:foldstart)
@@ -117,7 +116,6 @@ set foldmethod=syntax
   "return v:folddashes . sub
 "endfunction
 " }}}
-
 function! NeatFoldText() "{{{
   let line = ' ' . substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g') . ' '
   let lines_count = v:foldend - v:foldstart + 1
@@ -130,29 +128,33 @@ function! NeatFoldText() "{{{
 endfunction
 " }}}
 set foldtext=NeatFoldText()
-
 " Vimscript file settings ---------------------- {{{
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
 " }}}
-
+" Python file settings ---------------------- {{{
+augroup python_foldmethod_custom
+    autocmd!
+    autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal foldnestmax=2
+    " autocmd FileType python setlocal foldmethod=expr foldexpr=getline(v:lnum)=~'^\s*#'
+augroup END
+" }}}
 set nofoldenable
 " }}}
 " Basic Mappings ----------------- {{{
 let mapleader = " " 
 nnoremap <Leader>n :set nu! rnu!<CR>
 " Window {{{
-nnoremap <leader>q :close<cr>
-" nnoremap C :close<cr>
 
 " nnoremap <C-Tab> :bn<cr>
 " nnoremap <S-Tab> :bp<cr>
-"nmap <C-j> <C-W>j
-"nmap <C-k> <C-W>k
-"nmap <C-h> <C-W>h
-"nmap <C-l> <C-W>l
+nmap <C-j> <C-W>j
+nmap <C-k> <C-W>k
+nmap <C-h> <C-W>h
+nmap <C-l> <C-W>l
 nnoremap <c-\><c-t> :tabe<cr>
 nnoremap <c-\><c-\><c-t> :tabe 
 
@@ -186,7 +188,7 @@ vnoremap * y/\V<C-R>=substitute(g:get_visual_selection(), '\/', '\\\/', 'g')<CR>
 "cnoremap %% <C-R>=expand('%:h').'/'<cr>
 "cnoremap %% <C-R>=expand('%:p:h').'/'<cr>
 
-nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
+nnoremap <leader>cd :lcd %:p:h<CR>:NERDTreeCWD<CR>:pwd<CR>
 nnoremap <leader>sh :lcd %:p:h<CR>:sh<CR>
 nnoremap <leader>tm :lcd %:p:h<CR>:!tmux attach \|\| tmux<CR>
 nnoremap <leader><leader>tm :lcd %:p:h<CR>:!tmux<CR>
@@ -209,7 +211,7 @@ nnoremap <leader><esc> :noh<cr>
 " System Clipboard {{{
 nnoremap <leader>y $v0"+y
 nnoremap <leader><leader>y ggVG"+y
-nnoremap <leader>p "+P
+nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 vnoremap <leader>y "+y
 " }}}
@@ -230,9 +232,10 @@ vnoremap <leader>y "+y
 " }}}
 " New Habbits {{{
 " -------- nop keys ---------
-inoremap <esc> <nop>
+" inoremap <esc> <nop>
 nnoremap <C-f> <nop>
 nnoremap <C-b> <nop>
+nnoremap B <nop>
 " nnoremap : <nop>
 "nnoremap h <nop>
 "nnoremap l <nop>
@@ -244,6 +247,10 @@ nnoremap <C-b> <nop>
 " cnoremap <C-f> <ESC>
 noremap f <C-f>
 noremap b <C-b>
+noremap q b
+noremap Q B
+nnoremap <leader>q q
+nnoremap <leader>Q Q
 
 " inoremap jk <ESC><>
 inoremap <C-f> <ESC>
@@ -252,7 +259,8 @@ inoremap <C-h> <ESC>:noh<cr>
 vnoremap <C-f> <ESC>
 vnoremap <C-g> <ESC>
 vnoremap <C-h> <ESC>:noh<cr>
-" cnoremap <C-g> <ESC>
+cnoremap <C-g> <C-c>
+cnoremap ; <C-c>
 " cnoremap <C-c> 123456
 
 nnoremap s f
@@ -268,8 +276,10 @@ vnoremap ss g_
 nnoremap v V
 nnoremap V ^vg_
 
-nnoremap n nzzzv
-nnoremap N Nzzzv
+" nnoremap n nzzzv
+" nnoremap N Nzzzv
+nnoremap n nzv
+nnoremap N Nzv
 
 inoremap <C-a> <esc>I
 inoremap <C-e> <esc>A
@@ -311,10 +321,12 @@ inoremap <I <><esc>i
 " inoremap "" <Nop>
 " inoremap <> <Nop>
 
-inoremap / <esc>
-inoremap <esc> /
+inoremap ; <esc>
+onoremap ; <esc>
+inoremap <esc> ;
 " }}}
 nnoremap <F8> :NERDTreeToggle<CR>
+nnoremap <leader>f :NERDTreeToggle<CR>
 set pastetoggle=<F7>
 " }}}
 
@@ -543,6 +555,31 @@ augroup shell_quick_comment
   autocmd FileType sh vnoremap <buffer> - :call ToggleShellComment()<CR>
 augroup END
 " }}}
+
+" Auto Toggle Comments In sql ---------------------- {{{
+function! ToggleSQLCommentLines(linenum)
+  let currentline = getline(a:linenum)
+
+  " line starts with '--'
+  if match(currentline, '\v^[ \t]*\-\-') !=# -1
+    let currentline = substitute(currentline, '\v^([ \t]*)\-\-*[ \t]*', '\1', '')
+    call setline(a:linenum, currentline)
+  else
+    let currentline = substitute(currentline, '\v^[ \t]*', '\0-- ', '')
+    call setline(a:linenum, currentline)
+  endif
+endfunction
+
+function! ToggleSQLComment()
+  call ToggleSQLCommentLines('.')
+endfunction
+
+augroup sql_quick_comment
+  autocmd!
+  autocmd FileType sql nnoremap <buffer> - :call ToggleSQLComment()<CR>
+  autocmd FileType sql vnoremap <buffer> - :call ToggleSQLComment()<CR>
+augroup END
+" }}}
  
 " }}}
 " Run Current File {{{
@@ -562,10 +599,12 @@ endfunction " }}}
 
 function! RunPythonSplitWindow()
   write
+  lcd %:h
   let l:out = system("python " . bufname("%") . " 2>&1")
 
   let l:consoleName = '__Python_Out__'
   let l:nr = bufwinnr(l:consoleName)
+  let @n = bufwinnr(bufname("%"))
   if l:nr ==# -1
     " execute 'vsplit ' . l:consoleName
     execute 'belowright split ' . l:consoleName
@@ -576,8 +615,12 @@ function! RunPythonSplitWindow()
   normal! ggdG
   setlocal filetype=pythonoutput
   setlocal buftype=nofile
-  nnoremap <buffer> <silent> q :q<CR>
-  nnoremap <buffer> <silent> <Plug>RunCurrentFile :q<CR>
+
+  " nnoremap <buffer> <silent> q :q<CR>  " This will return to another file when there
+                                         " are split windows, which is not desirable
+  " Shortcut to quit and return to the source file
+  nnoremap <buffer> <silent> q                    :execute 'q <bar> '.@n.'wincmd w'<CR>
+  nnoremap <buffer> <silent> <Plug>RunCurrentFile :execute 'q <bar> '.@n.'wincmd w'<CR>
 
   call append(0, split(l:out, '\v\n'))
 endfunction
@@ -609,6 +652,7 @@ augroup END
 augroup sql_quick_run
   autocmd!
   autocmd FileType sql nnoremap <buffer> <Plug>RunCurrentFile :w\|:!mysql -tTv -hlocalhost -uroot < %<cr>
+  autocmd FileType sql nnoremap <buffer> <Plug>RunTestCurrentFile :w\|:!mysql -tTv -hlocalhost -uroot < %
 augroup END
 
 augroup javascript_quick_run
@@ -638,8 +682,19 @@ nnoremap <leader>ev :tabedit ~/dotfiles/.vimrc<CR>
 nnoremap <leader>es :tabedit ~/dotfiles/.vim/UltiSnips<CR>
 nnoremap <leader>eb :tabedit ~/dotfiles/.vim/bundle<CR>
 " }}}
-
-" The following maps the F8 key to toggle between hex and binary (while also setting the 
+" Make focusing window more obvious {{{
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * set colorcolumn=80
+    autocmd WinLeave * set colorcolumn=0
+    autocmd WinEnter * set cul
+    autocmd WinLeave * set nocul
+    autocmd WinEnter * set number
+    autocmd WinEnter * set relativenumber
+    autocmd WinLeave * set norelativenumber
+augroup END
+" }}}
+" The following maps the F8 key to toggle between hex and binary (while also setting the " {{{
 " noeol and binary flags, so if you :write your file, vim doesn't perform unwanted conversions.
 
 nnoremap <F7> :call HexMe()<CR>
@@ -658,3 +713,4 @@ function! HexMe()
     let $in_hex=1
   endif
 endfunction
+" }}}
