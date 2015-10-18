@@ -106,8 +106,6 @@ set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l/%L,%c%V%)\ %P
 " }}}
 " Foldmethod Settings --------------- {{{
 set foldmethod=syntax
-"nmap zr zR
-"nmap zm zM
 "set foldtext=MyFoldText()
 "function MyFoldText() " {{{
   "let line = getline(v:foldstart)
@@ -171,12 +169,12 @@ nmap <leader>\ <Plug>RunTestCurrentFile
 
 nnoremap !! :!
 " Search {{{
-nnoremap / /\v\c
-vnoremap / /\v\c
+nnoremap / /\v
+vnoremap / /\v
 "cnoremap %s/ %smagic/
 "cnoremap \>s/ \>smagic/
 
-nnoremap <leader>/ :vimgrep /\v\c/gj ./**/*<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-f>i
+nnoremap <leader>/ :vimgrep /\v/gj ./**/*<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-f>i
 "count search pattern
 nnoremap <leader><leader>/ :%s//\0/g<cr>
 
