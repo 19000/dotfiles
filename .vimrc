@@ -169,8 +169,8 @@ nmap <leader>\ <Plug>RunTestCurrentFile
 
 nnoremap !! :!
 " Search {{{
-nnoremap / /\v
-vnoremap / /\v
+nnoremap / /\v\c
+vnoremap / /\v\c
 "cnoremap %s/ %smagic/
 "cnoremap \>s/ \>smagic/
 
@@ -180,7 +180,7 @@ nnoremap <leader><leader>/ :%s//\0/g<cr>
 
 nnoremap * *<C-o>
 " vnoremap * y/\V<C-R>"<CR>N  " This fail when contain '/'
-vnoremap * y/\V<C-R>=substitute(g:get_visual_selection(), '\/', '\\\/', 'g')<CR><CR><C-o>
+vnoremap * y/\V<C-R>=substitute(g:Get_visual_selection(), '\/', '\\\/', 'g')<CR><CR><C-o>
 " }}}
 "audo fill pwd
 "cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -201,7 +201,7 @@ nnoremap <leader><leader>g :Gstatus<CR>
 
 nnoremap <leader>w :cw<cr>
 "nnoremap <leader><leader><leader> :tabe ~/.vimrc<cr>
-nnoremap <leader><leader><leader> :tabe $MYVIMRC<cr>
+nnoremap <leader><leader><leader> :tabedit ~/dotfiles/.vimrc<CR>
 " this mapping make vi behave awkward when starting
 "nnoremap <esc> :noh<return><esc>
 nnoremap <leader><esc> :noh<cr>
@@ -294,7 +294,7 @@ nnoremap <silent> ? :execute 'vimgrep /' . @/ . '/g %'<CR>:copen<CR>
 nnoremap <leader>z zMzvzz
 
 inoremap <C-u> <ESC>vawUea
-nnoremap <C-u> bvUe
+nnoremap <C-u> vawUe
 
 
 " iMap (I {I [i 'i "I <I
@@ -319,7 +319,10 @@ inoremap <I <><esc>i
 " inoremap "" <Nop>
 " inoremap <> <Nop>
 
-inoremap ; <esc>
+" inoremap ; <esc>
+" Simple <ESC> will not refresh cursor position sometimes while using YCM.
+" In order to perform refresh, move cursor left and right after pressing <ESC>
+inoremap ; <ESC>hl
 onoremap ; <esc>
 inoremap <esc> ;
 " }}}
@@ -396,6 +399,7 @@ let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
 
 " Ctrlp {{{
 let g:ctrlp_map = '<c-\><c-p>'
+let g:ctrlp_working_path_mode = 'rw'
 " }}}
 
 " }}}
@@ -431,7 +435,7 @@ autocmd VimLeave * call SaveSess()
 "autocmd VimEnter * call RestoreSess()
 " }}}
 " Test Area {{{
-function! g:get_visual_selection()
+function! g:Get_visual_selection()
   " Why is this not a built-in Vim script function?!
   let [lnum1, col1] = getpos("'<")[1:2]
   let [lnum2, col2] = getpos("'>")[1:2]
@@ -711,4 +715,11 @@ function! HexMe()
     let $in_hex=1
   endif
 endfunction
+" }}}
+" Gist current file {{{
+function! g:CreateGist()
+  execute "!python ~/python-learning/create_gist.py \"" . expand("%:p") . "\" " . &fileencoding . " | pbcopy"
+endfunction
+
+command! Gist call g:CreateGist()
 " }}}
