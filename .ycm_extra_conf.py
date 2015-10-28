@@ -86,6 +86,13 @@ flags = [
 './tests/gmock',
 '-isystem',
 './tests/gmock/include',
+
+# Solution for: mac osx stdio.h file not found
+# Ref: http://www.perlface.eu/?p=878
+# Google: "'stdio.h' file not found" youcompleteme
+# Google: clang VS gcc
+'-isystem',
+'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/',
 ]
 
 
