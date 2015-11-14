@@ -141,6 +141,7 @@ augroup python_foldmethod_custom
 augroup END
 " }}}
 set nofoldenable
+nnoremap zE :set foldmethod=manual<CR>zE
 " }}}
 " Basic Mappings ----------------- {{{
 let mapleader = " " 
@@ -400,7 +401,7 @@ let g:ctrlp_working_path_mode = 'rw'
 " YCM {{{
 " let g:ycm_global_ycm_extra_conf="~/.ycm_extra_conf.py"
 let g:ycm_global_ycm_extra_conf="/Users/durrrr/dotfiles/.ycm_extra_conf.py"
-let g:loaded_youcompleteme = 1
+" let g:loaded_youcompleteme = 1
 " }}}
 " }}}
 " Jump to last cursor position unless it's invalid or in an event handler {{{
