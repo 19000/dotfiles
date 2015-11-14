@@ -322,9 +322,14 @@ inoremap <I <><esc>i
 " inoremap ; <esc>
 " Simple <ESC> will not refresh cursor position sometimes while using YCM.
 " In order to perform refresh, move cursor left and right after pressing <ESC>
+"
+" By the way, Author of YCM says: 
+" > Bottom line, if you use Ctrl-C to exit insert mode in Vim, you're gonna have
+" a bad time.
 inoremap ; <ESC>hl
 onoremap ; <esc>
 inoremap <esc> ;
+inoremap <C-SPACE>; ;
 " }}}
 nnoremap <F8> :NERDTreeToggle<CR>
 nnoremap <leader>f :NERDTreeToggle<CR>
@@ -357,8 +362,7 @@ let g:syntastic_mode_map = {
     \ "active_filetypes": ["ruby", "php"],
     \ "passive_filetypes": ["puppet"] }
 " }}}
-
-" Solarized Vim Theme Settings --------- {{{
+" Solarized Vim Theme --------- {{{
 "syntax enable
 "set background=light
 "let g:solarized_termtrans=1
@@ -367,23 +371,17 @@ let g:syntastic_mode_map = {
 "let g:solarized_visibility="high"
 "colorscheme solarized
 " }}}
-"
 "filetype plugin indent on {{{
 " filetype plugin on
 " [PLUGIN] pydiction config. necessary.
 " let g:pydiction_location = '/home/user/.vim/bundle/pydiction/complete-dict'
 " }}}
-
 " Jedi Config {{{
 let g:jedi#popup_on_dot = 0
 " }}}
-
 " UltiSnips {{{
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-" let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsExpandTrigger="<c-j>"
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsListSnippets="<c-l>" 
@@ -391,17 +389,19 @@ let g:UltiSnipsListSnippets="<c-l>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 " }}}
-
 " MarkdownPreview.vim{{{
 let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
 " let g:mkdp_path_to_chrome = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"
 " }}}
-
 " Ctrlp {{{
 let g:ctrlp_map = '<c-\><c-p>'
 let g:ctrlp_working_path_mode = 'rw'
 " }}}
-
+" YCM {{{
+" let g:ycm_global_ycm_extra_conf="~/.ycm_extra_conf.py"
+let g:ycm_global_ycm_extra_conf="/Users/durrrr/dotfiles/.ycm_extra_conf.py"
+let g:loaded_youcompleteme = 1
+" }}}
 " }}}
 " Jump to last cursor position unless it's invalid or in an event handler {{{
 augroup vimrcEx
@@ -635,7 +635,10 @@ augroup END
 
 augroup c_quick_run
   autocmd!
-  autocmd FileType c nnoremap <buffer> <Plug>RunCurrentFile :lcd %:p:h<CR>:w\|:!gcc %&&./a.out<cr>
+  " autocmd FileType c nnoremap <buffer> <Plug>RunCurrentFile :lcd %:p:h<CR>:w\|:!gcc %&&./a.out<cr>
+  autocmd FileType c nnoremap <buffer> <Plug>RunCurrentFile :lcd %:p:h<CR>:w\|:!gcc -Wall -o a.out % && ./a.out<cr>
+  " autocmd FileType c nnoremap <buffer> <Plug>RunTestCurrentFile :lcd %:p:h<CR>:w\|:!gcc -Wall -o %:r % && NUM=1; while [ -f %:p:h/test/%:t:r_in_$NUM -a -f %:p:h/test/%:t:r_out_$NUM ]; do diff <(./%:r < %:p:h/test/%:t:r_in_$NUM) %:p:h/test/%:t:r_out_$NUM; [ $? -eq 0 ] && echo $NUM.\ SUCCESS \|\| echo $NUM.\ FAIL; NUM=$((NUM+1)); done<cr>
+  autocmd FileType c nnoremap <buffer> <Plug>RunTestCurrentFile :lcd %:p:h<CR>:w\|:!gcc -Wall -o a.out % && NUM=1; while [ -f %:p:h/test/%:t:r_in_$NUM -a -f %:p:h/test/%:t:r_out_$NUM ]; do diff <(./a.out < %:p:h/test/%:t:r_in_$NUM) %:p:h/test/%:t:r_out_$NUM; [ $? -eq 0 ] && echo $NUM.\ SUCCESS \|\| echo $NUM.\ FAIL; NUM=$((NUM+1)); done<cr>
 augroup END
 
 augroup java_quick_run
@@ -679,10 +682,12 @@ augroup END
 " nnoremap <Leader>K viw"ay:h <C-r>a
 " vnoremap <Leader>K "ay:h <C-r>a
 " }}}
-" Quick editing {{{
+" Most used files quick opening {{{
 nnoremap <leader>ev :tabedit ~/dotfiles/.vimrc<CR>
 nnoremap <leader>es :tabedit ~/dotfiles/.vim/UltiSnips<CR>
 nnoremap <leader>eb :tabedit ~/dotfiles/.vim/bundle<CR>
+nnoremap <leader>ee :tabedit ~/dotfiles/<CR>
+nnoremap <leader>ey :tabedit ~/dotfiles/.ycm_extra_conf.py<CR>
 " }}}
 " Make focusing window more obvious {{{
 augroup BgHighlight
