@@ -189,7 +189,9 @@ vnoremap * y/\V<C-R>=substitute(g:Get_visual_selection(), '\/', '\\\/', 'g')<CR>
 
 nnoremap <leader>cd :lcd %:p:h<CR>:NERDTreeCWD<CR>:pwd<CR>
 nnoremap <leader>sh :lcd %:p:h<CR>:sh<CR>
-nnoremap <leader>tm :lcd %:p:h<CR>:!tmux attach \|\| tmux<CR>
+" nnoremap <leader>tm :lcd %:p:h<CR>:silent !tmux attach \|\| tmux<CR>:redraw!<CR>
+nnoremap <leader>tm :lcd %:p:h<CR>:silent !tmux new-session -c '%:p:h' -s '%:p:h:gs?\.?,?' -n '%:t:gs?\.?,?' bash<CR>:redraw!<CR>
+
 nnoremap <leader><leader>tm :lcd %:p:h<CR>:!tmux<CR>
 
 nnoremap <leader>ct :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
@@ -252,7 +254,7 @@ nnoremap <leader>q q
 nnoremap <leader>Q Q
 
 " inoremap jk <ESC><>
-inoremap <C-f> <ESC>
+" inoremap <C-f> <ESC>
 inoremap <C-g> <ESC>
 inoremap <C-h> <ESC>:noh<cr>
 vnoremap <C-f> <ESC>
@@ -295,7 +297,8 @@ nnoremap <silent> ? :execute 'vimgrep /' . @/ . '/g %'<CR>:copen<CR>
 nnoremap <leader>z zMzvzz
 
 inoremap <C-u> <ESC>vawUea
-nnoremap <C-u> vawUe
+inoremap <C-f> <ESC>vawUea
+nnoremap <C-u> vawUw
 
 
 " iMap (I {I [i 'i "I <I
@@ -338,7 +341,7 @@ set pastetoggle=<F7>
 " }}}
 
 " Plugin Settings {{{
-" Settings for Syntastic (python syntax checker) ------ {{{
+" Syntastic (python syntax checker) ------ {{{
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
 "set statusline+=%*
@@ -357,6 +360,10 @@ let g:syntastic_javascript_checkers = ['jshint']
 
 " Remove Python Checkers For Test.
 "let g:syntastic_python_checkers = []
+
+" let g:syntastic_python_checkers=['flake8']
+" let g:syntastic_python_flake8_args='--ignore=E501,E225'
+let g:syntastic_python_flake8_args='--ignore=E501'
 
 let g:syntastic_mode_map = {
     \ "mode": "passive",
@@ -402,6 +409,10 @@ let g:ctrlp_working_path_mode = 'rw'
 " let g:ycm_global_ycm_extra_conf="~/.ycm_extra_conf.py"
 let g:ycm_global_ycm_extra_conf="/Users/durrrr/dotfiles/.ycm_extra_conf.py"
 " let g:loaded_youcompleteme = 1
+" }}}
+" NERDTree {{{
+let NERDTreeMinimalUI=1
+let NERDTreeIgnore = ['\~$', '.pyc$[[file]]']
 " }}}
 " }}}
 " Jump to last cursor position unless it's invalid or in an event handler {{{
@@ -600,6 +611,33 @@ function! PotionShowBytecode() " Example from Learn Vimscript The Hard Way {{{
     call append(0, split(bytecode, '\v\n'))
 endfunction " }}}
 
+function! RunSplitWindow(cmd)
+  write
+  lcd %:h
+  let l:out = system(a:cmd . " " . bufname("%") . " 2>&1")
+
+  let l:consoleName = '__' . a:cmd . '_out__'
+  let l:nr = bufwinnr(l:consoleName)
+  let @n = bufwinnr(bufname("%"))
+  if l:nr ==# -1
+    execute 'belowright split ' . l:consoleName
+  else
+    execute l:nr . 'wincmd w'
+  endif
+
+  normal! ggdG
+  setlocal filetype=myoutput
+  setlocal buftype=nofile
+
+  " nnoremap <buffer> <silent> q :q<CR>  " This will return to another file when there
+                                         " are split windows, which is not desirable
+  " Shortcut to quit and return to the source file
+  nnoremap <buffer> <silent> q                    :execute 'q <bar> '.@n.'wincmd w'<CR>
+  nnoremap <buffer> <silent> <Plug>RunCurrentFile :execute 'q <bar> '.@n.'wincmd w'<CR>
+
+  call append(0, split(l:out, '\v\n'))
+endfunction
+
 function! RunPythonSplitWindow()
   write
   lcd %:h
@@ -665,7 +703,11 @@ augroup javascript_quick_run
   autocmd!
   autocmd FileType javascript nnoremap <buffer> <Plug>RunCurrentFile :lcd %:h\|:w\|:!node %<cr>
   autocmd FileType javascript nnoremap <buffer> <Plug>RunTestCurrentFile :lcd %:h\|:w\|:!cd ../; mocha<cr>
- 
+augroup END
+
+augroup shellscript_quick_run
+  autocmd!
+  autocmd FileType sh nnoremap <buffer> <Plug>RunCurrentFile :call RunSplitWindow('bash')<CR>
 augroup END
 " }}}
 " Vim script manual shortcut {{{
@@ -697,9 +739,9 @@ augroup BgHighlight
     autocmd WinLeave * set colorcolumn=0
     autocmd WinEnter * set cul
     autocmd WinLeave * set nocul
-    autocmd WinEnter * set number
-    autocmd WinEnter * set relativenumber
-    autocmd WinLeave * set norelativenumber
+    " autocmd WinEnter * set number
+    " autocmd WinEnter * set relativenumber
+    " autocmd WinLeave * set norelativenumber
 augroup END
 " }}}
 " The following maps the F8 key to toggle between hex and binary (while also setting the " {{{

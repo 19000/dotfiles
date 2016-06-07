@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: leetcode
+# key: leetcode
+# --
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <limits.h>
+
+$0
+
+int main(int argc, char *argv[])
+{
+    
+    return 0;
+}

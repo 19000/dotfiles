@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: compare
+# key: compare
+# --
+int compare_ints(const void *a, const void *b) {
+    int arg1 = *(const int *) a;
+    int arg2 = *(const int *) b;
+    return (arg1 > arg2) - (arg1 < arg2);
+}
