@@ -3,10 +3,12 @@
 DIR=`pwd`
 
 echo '\
+.aria2
 .vimrc
 .vim
 .emacs.d
 .gitconfig
+.ycm_extra_conf.py
 .tmux.conf' |
 while read F; do 
   if [ -f $HOME/$F -o -d $HOME/$F ]; then 
