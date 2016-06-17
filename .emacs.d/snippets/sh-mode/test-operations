@@ -1,0 +1,22 @@
+# -*- mode: snippet -*-
+# name: test operations
+# key: test
+# --
+[ 0 -eq 0 ]
+[  -d DIR ]
+[  -f FILE ]
+[  -z STRING ]
+[  -n STRING ]
+[  STRING1 = STRING2 ]
+[  STRING1 != STRING2 ]
+
+[  ARG1 -eq ARG2 ]
+[  ARG1 -ne ARG2 ]
+[  ARG1 -lt ARG2 ]
+[  ARG1 -le ARG2 ]
+[  ARG1 -gt ARG2 ]
+[  ARG1 -ge ARG2 ]
+
+[  ! EXPR ]
+[  EXPR1 -a EXPR2 ]
+[  EXPR1 -o EXPR2 ]

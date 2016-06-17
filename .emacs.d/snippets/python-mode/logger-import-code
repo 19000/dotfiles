@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: logging import and config
+# key: log
+# --
+import logging
+import traceback
+
+FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+logging.basicConfig(level=logging.INFO, format=FORMAT)
+logger = logging.getLogger('dbg-log')
+tracelogger = logging.getLogger('trace-log')
+
+def getDbgLogger():
+    return logger
+
+def logExceptionTraceback():
+    tracelogger.error(traceback.format_exc())

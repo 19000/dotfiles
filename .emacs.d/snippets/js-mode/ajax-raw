@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: ajax
+# key: ajax
+# --
+var $4 = '$5';
+var data = new FormData();
+data.append("${3:b64_data}", ${4:base64});
+
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(){
+	if (xhr.readyState === 4 && xhr.status === 200 ){
+		xhr.responseText
+		$0
+	}
+};
+xhr.open("POST", ${1:"http://$2"});
+xhr.send(data);
