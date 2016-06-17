@@ -323,12 +323,20 @@ version 2015-08-23"
 (setq jedi:complete-on-dot t)
 
 ;;; System Clipboard: Copy, Paste and Cut
-(defun pbcopy ()
+(defun pbcopy-old ()
   (interactive)
   (call-process-region (point) (mark) "pbcopy")
   (setq deactivate-mark t))
 ;;; This also works
 ;; (shell-command-on-region (region-beginning) (region-end) "pbcopy")
+(defun pbcopy (start end arg &optional interactive)
+  (interactive "r\nP\np")
+  (if interactive
+      (if (region-active-p)
+          (call-process-region start end "pbcopy")
+        (call-process-region (point-min) (point-max) "pbcopy")))
+  (setq deactivate-mark t))
+
 
 (defun pbpaste ()
   (interactive)
@@ -393,3 +401,9 @@ version 2015-08-23"
 ;; (setq desktop-restore-in-current-display t)
 ;;; It is the (setq desktop-restore-forces-onscreen nil) line specifically that fixes this issue. 
 (setq desktop-restore-forces-onscreen nil)
+
+
+;;; http://stackoverflow.com/questions/10363982/how-can-i-open-a-temporary-buffer
+(defun new-scratch ()
+  (interactive)
+  (switch-to-buffer (make-temp-name "Scratch-")))
